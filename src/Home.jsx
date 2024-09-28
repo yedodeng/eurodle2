@@ -9,8 +9,8 @@ export default function Home({ daily }) {
   let [ar, setAr] = useState([]);
   let [peon, setPeon] = useState([]);
   let [al, setAl] = useState(false);
-  let [names, setNames] = useState([]);
   let [preans, setPreans] = useState();
+  let [names, setNames] = useState([]);
 
   let now = new Date();
   let mon = now.getMonth() + 1 < 10 ? "0" + (now.getMonth() + 1) : str(now.getMonth() + 1); 
