@@ -1,30 +1,41 @@
 import { Link, Outlet, Route, Routes } from "react-router-dom";
-import Home from "./Home";
 import "./App.css"
-import Leaderboard from "./leaderboard";
+import Leaderboard from "./Pages/leaderboard";
 import Admin from "./admin";
+import Unlimited from "./Pages/unlimited";
+import Daily from "./Pages/daily";
+import { createContext, useContext, useState } from "react";
+import Custom from "./Pages/custom";
+
+
+export const AppContext = createContext(null);
 
 export default function App() {
+  let [timer, setTimer] =useState();
+
   // return (
   //   <div>
   //     <Home />
   //   </div>
   // );
+
   return (
-    <div>
+    <AppContext.Provider value={{timer, setTimer}}>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route path="/" element={<Home daily={true} key={1}/>}></Route>
-            <Route path="/unlimited" element={<Home daily={false} key={2}/>}></Route>
+            <Route path="/" element={<Daily />}></Route>
+            <Route path="/unlimited" element={<Unlimited />}></Route>
             <Route path="/leaderboard" element={<Leaderboard />}></Route>
             <Route path="/admin" element={<Admin />}></Route>
+            <Route path="/custom" element={<Custom />}></Route>
           </Route>
         </Routes>
-    </div>
+    </AppContext.Provider>
   );
 }
 
 function Layout() {
+  let {x} = useContext(AppContext);
   return (
     <div className="min-h-screen flex flex-col">
       <nav className="flex items-center border-primary border-b p-5 bg-gray-200 space-x-8">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "./supabaseClient";
+import { supabase } from "../supabaseClient";
 import {isSameDay} from "date-fns";
 
 export default function Leaderboard({ }) {
@@ -13,15 +13,12 @@ export default function Leaderboard({ }) {
       .from("leaderboard")
       .select("*")
       .order("score");
-    console.log(data);
     setSbms(data);
   }
 
   function chk(dat) {
     let d1 = new Date(dat);
     let d2 = new Date();
-    console.log(d1);
-    console.log(d2);
     return isSameDay(d1, d2);
   }
 

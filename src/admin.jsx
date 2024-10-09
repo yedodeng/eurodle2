@@ -25,14 +25,12 @@ export default function Admin() {
       setError("Incorrect Password");
       return;
     }
-    if (date) {
+    if (ev.target["date"]) {
       const { error } = await supabase
         .from("answers")
         .insert(
-          {
-            name: ev.target["name"].value,
-            date: ev.target["date"].value,
-          }
+          { name: ev.target["name"].value,
+            date: ev.target["date"].value }
         );
     } else {
       const { error } = await supabase
