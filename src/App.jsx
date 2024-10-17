@@ -6,7 +6,7 @@ import Unlimited from "./Pages/unlimited";
 import Daily from "./Pages/daily";
 import { createContext, useContext, useState } from "react";
 import Custom from "./Pages/custom";
-import Game2 from "./Pages/game2";
+import Knockout from "./Pages/knockout";
 
 
 export const AppContext = createContext(null);
@@ -29,7 +29,7 @@ export default function App() {
             <Route path="/leaderboard" element={<Leaderboard />}></Route>
             <Route path="/admin" element={<Admin />}></Route>
             <Route path="/custom" element={<Custom />}></Route>
-            <Route path="/game2" element={<Game2 />}></Route>
+            <Route path="/game2" element={<Knockout />}></Route>
           </Route>
         </Routes>
     </AppContext.Provider>
@@ -51,10 +51,10 @@ function Layout() {
           <Link to="/leaderboard">Leaderboard</Link>
         </div>
         <div className="text-xl font-bold">
-          <Link to="/admin">Admin</Link>
+          <Link to="/game2">Knockout</Link>
         </div>
         <div className="text-xl font-bold">
-          <Link to="/game2">2</Link>
+          <Link to="/admin">Admin</Link>
         </div>
       </nav>
       <main className="p-5"><Outlet /></main>

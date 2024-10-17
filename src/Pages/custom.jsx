@@ -1,13 +1,15 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../App";
 
 export default function Custom() {
     let {setTimer} = useContext(AppContext);
+    let [sto, setSto] = useState(undefined);
 
     async function changeTimer(ev) {
         ev.preventDefault();
         let time = ev.target["time"].value;
         setTimer(time);
+        setSto(time);
     }
 
     return (
@@ -15,7 +17,7 @@ export default function Custom() {
         <div>
           <input name="time" className="input input-bordered w-full max-w-xs" />
         </div>
-        <button className="btn text-xl btn-primary hover:btn-secondary">Submit2</button>
+        <button className="btn text-xl btn-primary hover:btn-secondary">{sto ? sto : "Hello"}</button>
         <div className="bg-gray-300 duration-1000 w-48 hover:w-64">test</div>
       </form>
     )

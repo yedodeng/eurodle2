@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 export default function Daily() {
   let { peon, names, setNames, loadPeon, chk } = useGuesser();
-  let [ans, setAns] = useState({});
+  let [ans, setAns] = useState();
   let [showMod, setShowMod] = useState(false);
   let [win, setWin] = useState(false);
   let [ar, setAr] = useState([]);
@@ -24,6 +24,7 @@ export default function Daily() {
   }, []);
 
   useEffect(() => {
+    console.log(ans);
     if (!ans) dailyAns();
   }, [peon])
 
@@ -44,6 +45,7 @@ export default function Daily() {
   }
 
   async function dailyAns() {
+    console.log("here")
     let date = new Date();
     let datePie = [
       date.getFullYear(),
@@ -108,10 +110,11 @@ export default function Daily() {
             <Link to="/unlimited">Play More</Link>
           </button>
         </div>}
+      <div className="text-center text-xl font-bold mt-8 mb-4">Number of Guesses: {sco}</div>
       <Modal show={showMod} close={() => setShowMod(false)} btn="X">
-        <div className="flex justify-center">
-          <div className="m-4 mt-6 text-2xl font-bold">Victory!!</div>
-        </div>
+        <div className="mt-6 text-2xl font-bold text-center">Victory!!</div>
+        <div className="m-4 text-xl font-bold text-center">Number of Guesses: {sco}</div>
+
         <form className="flex flex-col justify-center space-y-4" onSubmit={addName}>
           <input placeholder="Submit your name to the leaderboard" name="name" className="input input-bordered w-full" />
           <button className="btn text-xl btn-primary">Submit</button>
