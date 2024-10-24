@@ -36,7 +36,7 @@ export default function useGuesser() {
 
   function chk(dat) {
     let d1 = new Date(dat);
-    d1.setDate(d1.getDate() + 1)
+    d1.setDate(d1.getDate())
     let d2 = new Date();
     return isSameDay(d1, d2);
   }

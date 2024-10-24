@@ -7,6 +7,7 @@ import Daily from "./Pages/daily";
 import { createContext, useContext, useState } from "react";
 import Custom from "./Pages/custom";
 import Knockout from "./Pages/knockout";
+import Home from "./Pages/home";
 
 
 export const AppContext = createContext(null);
@@ -24,7 +25,8 @@ export default function App() {
     <AppContext.Provider value={{timer, setTimer}}>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route path="/" element={<Daily />}></Route>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/daily" element={<Daily />}></Route>
             <Route path="/unlimited" element={<Unlimited />}></Route>
             <Route path="/leaderboard" element={<Leaderboard />}></Route>
             <Route path="/admin" element={<Admin />}></Route>
@@ -42,13 +44,13 @@ function Layout() {
     <div className="min-h-screen flex flex-col">
       <nav className="flex items-center border-primary border-b p-5 bg-gray-200 space-x-8">
         <div className="text-xl font-bold">
-          <Link to="/">Daily</Link>
+        <Link to="/">Logo Here</Link>
+        </div>
+        <div className="text-xl font-bold">
+          <Link to="/daily">Daily</Link>
         </div>
         <div className="text-xl font-bold">
           <Link to="/unlimited">Unlimited</Link>
-        </div>
-        <div className="text-xl font-bold">
-          <Link to="/leaderboard">Leaderboard</Link>
         </div>
         <div className="text-xl font-bold">
           <Link to="/game2">Knockout</Link>

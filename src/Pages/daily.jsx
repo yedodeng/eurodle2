@@ -12,19 +12,20 @@ export default function Daily() {
   let [win, setWin] = useState(false);
   let [ar, setAr] = useState([]);
   let [al, setAl] = useState(false);
-  let [played, setPlayed] = useState([]);
+  let [played, setPlayed] = useState(false);
 
-  const testt = false;
+  const testt = true;
   const won = localStorage.getItem("won");
   const sco = localStorage.getItem("score");
-
   useEffect(() => {
-    if (won && chk(won)) setPlayed(true);
+    if (won && chk(won)) {
+      setPlayed(true);
+    }
+    if (!chk(won) || !testt) localStorage.setItem("score", 0)
     loadData();
   }, []);
 
   useEffect(() => {
-    console.log(ans);
     if (!ans) dailyAns();
   }, [peon])
 
@@ -45,7 +46,6 @@ export default function Daily() {
   }
 
   async function dailyAns() {
-    console.log("here")
     let date = new Date();
     let datePie = [
       date.getFullYear(),
@@ -56,8 +56,8 @@ export default function Daily() {
     let uniq = Math.pow(datePieAsNum, 2).toString();
     let i = Math.floor((uniq.slice(-7) * 1e-7 * peon.length));
     let obe = peon[i];
-    console.log(obe);
     setAns(obe);
+    console.log(obe)
   }
 
   async function guess(ev) {
@@ -77,6 +77,7 @@ export default function Daily() {
       setAr([...ar, gue]);
       setAl(false);
       setNames(names.filter((v) => v != gue.name));
+      localStorage.setItem("score", Number(localStorage.getItem("score")) + 1);
     }
     ev.target.reset();
   }
@@ -96,6 +97,11 @@ export default function Daily() {
     <>
       <div className="text-2xl text-center font-bold mt-8">You have already played today</div>
       <div className="text-2xl text-center font-bold mt-8">You got a score of {sco} </div>
+      <div className="flex justify-center m-10">
+        <button className="btn btn-lg text-2xl ">
+          <Link to="/leaderboard">Leaderboard</Link>
+        </button>
+      </div>
     </>
   )
   return (
@@ -110,11 +116,15 @@ export default function Daily() {
             <Link to="/unlimited">Play More</Link>
           </button>
         </div>}
-      <div className="text-center text-xl font-bold mt-8 mb-4">Number of Guesses: {sco}</div>
+      <div className="text-center text-xl font-bold my-4">Number of Guesses: {sco}</div>
+      <div className="flex justify-end">
+        <button className="btn text-xl ">
+          <Link to="/leaderboard">Leaderboard</Link>
+        </button>
+      </div>
       <Modal show={showMod} close={() => setShowMod(false)} btn="X">
         <div className="mt-6 text-2xl font-bold text-center">Victory!!</div>
         <div className="m-4 text-xl font-bold text-center">Number of Guesses: {sco}</div>
-
         <form className="flex flex-col justify-center space-y-4" onSubmit={addName}>
           <input placeholder="Submit your name to the leaderboard" name="name" className="input input-bordered w-full" />
           <button className="btn text-xl btn-primary">Submit</button>
