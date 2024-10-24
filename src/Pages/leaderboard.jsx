@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
-import {isSameDay} from "date-fns";
+import { isSameDay } from "date-fns";
+import H2 from "../components/h2";
 
-export default function Leaderboard({ }) {
+export default function Leaderboard({}) {
   let [sbms, setSbms] = useState([]);
   useEffect(() => {
     loadData();
@@ -23,21 +24,21 @@ export default function Leaderboard({ }) {
   }
 
   return (
-    <>
-      <div className="text-2xl text-center font-bold mt-4">Leaderboard</div>
+    <div className="space-y-10">
+      <H2>Leaderboard</H2>
       <div className="flex justify-center">
-        <div className="w-4/5 my-8  bg-gray-100 rounded">
-          <table className="table">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Score</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sbms
-                ? sbms.filter((sbm, i) => chk(sbm.date))
+        <table className="table-1">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sbms
+              ? sbms
+                  .filter((sbm, i) => chk(sbm.date))
                   .map((sbm, i) => (
                     <tr key={i}>
                       <th> {i + 1} </th>
@@ -45,11 +46,10 @@ export default function Leaderboard({ }) {
                       <td> {sbm.score} </td>
                     </tr>
                   ))
-                : ""}
-            </tbody>
-          </table>
-        </div>
+              : ""}
+          </tbody>
+        </table>
       </div>
-    </>
-  )
+    </div>
+  );
 }
