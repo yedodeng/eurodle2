@@ -77,7 +77,7 @@ export default function Unlimited() {
       {win && (
         <div className=" m-4 flex justify-center">
           <button className="btn text-xl btn-primary" onClick={newGame}>New Game</button>
-        </div>}
+        </div>)}
       <div className="text-center text-xl font-bold my-4">Number of Guesses: {sco}</div>
       <Modal show={showMod} close={() => setShowMod(false)} btn="X">
         <div className="m-4 mt-6 text-2xl font-bold text-center">Victory!!</div>
