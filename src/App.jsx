@@ -9,6 +9,7 @@ import Custom from "./Pages/custom";
 import Knockout from "./Pages/knockout";
 import Home from "./Pages/home";
 import StatsPage from "./Pages/stats";
+import RecentGames from "./Pages/recent";
 
 export const AppContext = createContext(null);
 
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/custom" element={<Custom />}></Route>
           <Route path="/game2" element={<Knockout />}></Route>
           <Route path="/stats" element={<StatsPage />}></Route>
+          <Route path="/recent" element={<RecentGames />}></Route>
         </Route>
       </Routes>
     </AppContext.Provider>
@@ -46,7 +48,7 @@ function Layout() {
       <nav className="flex items-center justify-around p-5 bg-gradient-end space-x-8">
         <div>
           <Link to="/">
-            <img src="/logo.png" className="h-12"/>
+            <img src="/logo.png" className="h-12" />
           </Link>
         </div>
         <div>

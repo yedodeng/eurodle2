@@ -8,52 +8,30 @@ import Modal from "../modal";
 import { supabase } from "../supabaseClient";
 
 export default function Daily() {
-  let { peon, names, setNames, loadPeon, chk } = useGuesser();
-  let [ans, setAns] = useState();
+  let { peon, names, setNames, loadPeon } = useGuesser();
+  let [ans, setAns] = useState({});
   let [showMod, setShowMod] = useState(false);
   let [win, setWin] = useState(false);
   let [ar, setAr] = useState([]);
   let [al, setAl] = useState(false);
-  let [played, setPlayed] = useState(false);
-
-  const testt = true;
-  const won = localStorage.getItem("won");
-  const sco = localStorage.getItem("score");
-  useEffect(() => {
-    if (won && chk(won)) {
-      setPlayed(true);
-    }
-    if (!chk(won) || !testt) localStorage.setItem("score", 0);
-    loadData();
-  }, []);
+  let [sco, setSco] = useState(0);
+  let [recentGames, setRecentGames] = useState([]);
 
   useEffect(() => {
-    if (!ans) dailyAns();
+    newAns();
+    loadRecentGames();
   }, [peon]);
 
-  async function loadData() {
-    const { data: data3 } = await supabase.from("answers").select("*");
-
-    let sto = data3.filter((v) => chk(v.date));
-    if (sto.length > 0) {
-      const { data } = await supabase
-        .from("people")
-        .select("*")
-        .eq("name", sto[0].name)
-        .single();
-      setAns(data);
-    }
+  async function loadRecentGames() {
+    let logs = JSON.parse(localStorage.getItem("unlimited-log") || "[]");
+    setRecentGames(logs.slice(-5));
   }
 
-  async function dailyAns() {
-    let date = new Date();
-    let datePie = [date.getFullYear(), date.getMonth(), date.getDate()];
-    let datePieAsNum = +datePie.join("");
-    let uniq = Math.pow(datePieAsNum, 2).toString();
-    let i = Math.floor(uniq.slice(-7) * 1e-7 * peon.length);
+  async function newAns() {
+    let i = Math.floor(Math.random() * peon.length);
     let obe = peon[i];
-    setAns(obe);
     console.log(obe);
+    setAns(obe);
   }
 
   async function guess(ev) {
@@ -66,46 +44,37 @@ export default function Daily() {
       setShowMod(true);
       setWin(true);
       setAl(false);
-      let da = new Date();
-      localStorage.setItem("won", da);
-      localStorage.setItem("score", ar.length + 1);
+
+      // store data in local storage
+      storeStat();
     } else {
       setAr([...ar, gue]);
       setAl(false);
       setNames(names.filter((v) => v != gue.name));
-      localStorage.setItem("score", Number(localStorage.getItem("score")) + 1);
     }
+    setSco(sco + 1);
     ev.target.reset();
   }
 
-  async function addName(ev) {
-    ev.preventDefault();
-    const { error } = await supabase.from("leaderboard").insert({
-      name: ev.target["name"].value,
-      score: ar.length,
-    });
-    if (error) console.log(error);
-    setShowMod(false);
+  function storeStat() {
+    // store log
+    let logs = JSON.parse(localStorage.getItem("unlimited-log") || "[]");
+    let log = { ...ans, score: sco, time: new Date() };
+    logs.push(log);
+    localStorage.setItem("unlimited-log", JSON.stringify(logs));
+    setRecentGames((v) => [...v, log]);
   }
-  if (played && testt)
-    return (
-      <>
-        <div className="text-2xl text-center font-bold mt-8">
-          You have already played today
-        </div>
-        <div className="text-2xl text-center font-bold mt-8">
-          You got a score of {sco}{" "}
-        </div>
-        <div className="flex justify-center m-10">
-          <button className="btn btn-lg text-2xl ">
-            <Link to="/leaderboard">Leaderboard</Link>
-          </button>
-        </div>
-      </>
-    );
+
+  async function newGame() {
+    setWin(false);
+    newAns();
+    setShowMod(false);
+    setAr([]);
+  }
+
   return (
     <div className="space-y-5 flex flex-col items-center flex-1">
-      <H2>Eurodle Daily</H2>
+      <H2>Eurodle Unlimited</H2>
       <div>Guess the Important European!</div>
       <div className="h-5"></div>
 
@@ -137,9 +106,9 @@ export default function Daily() {
           Number of Guesses: <span className="font-bold text-2xl">{sco}</span>
         </div>
         <div className="flex justify-end">
-          <Link to="/leaderboard" className="flex items-center space-x-2">
+          <Link to="/recent" className="flex items-center space-x-2">
             <FaArrowCircleRight />
-            <div className="font-bold">Leaderboard</div>
+            <div className="font-bold">Recent Games</div>
           </Link>
         </div>
       </div>
@@ -167,17 +136,6 @@ export default function Daily() {
         <div className="m-4 text-xl font-bold text-center">
           Number of Guesses: {sco}
         </div>
-        <form
-          className="flex flex-col justify-center space-y-4"
-          onSubmit={addName}
-        >
-          <input
-            placeholder="Submit your name to the leaderboard"
-            name="name"
-            className="input input-bordered w-full bg-transparent"
-          />
-          <button className="btn text-xl btn-primary">Submit</button>
-        </form>
       </Modal>
     </div>
   );
