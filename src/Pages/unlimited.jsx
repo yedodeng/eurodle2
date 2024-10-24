@@ -73,6 +73,7 @@ export default function Daily() {
   }
 
   return (
+ main
     <div className="space-y-5 flex flex-col items-center flex-1">
       <H2>Eurodle Unlimited</H2>
       <div>Guess the Important European!</div>
@@ -131,6 +132,18 @@ export default function Daily() {
       </form>
 
       {/* modal */}
+=======
+    <>
+      <div className="text-2xl text-center font-bold mt-4">Eurodle Unlimited</div>
+      <div className="text-lg text-center font-bold">Guess the Important European!</div>
+      {al && <div className="text-lg text-center text-error font-bold">Invalid Guess</div>}
+      <Guesses ar={ar} ans={ans} win={win} guess={guess} names={names} />
+      {win && (
+        <div className=" m-4 flex justify-center">
+          <button className="btn text-xl btn-primary" onClick={newGame}>New Game</button>
+        </div>)}
+      <div className="text-center text-xl font-bold my-4">Number of Guesses: {sco}</div>
+ main
       <Modal show={showMod} close={() => setShowMod(false)} btn="X">
         <div className="mt-6 text-2xl font-bold text-center">Victory!!</div>
         <div className="m-4 text-xl font-bold text-center">
