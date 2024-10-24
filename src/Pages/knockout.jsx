@@ -170,8 +170,8 @@ export default function Knockout() {
                   key={i}
                 >
                   {v}
-                  {matchValue(ans, v) ? 1 : 0}
-                  {chk(key) ? 1 : 0}
+                  {/* {matchValue(ans, v) ? 1 : 0}
+                  {chk(key) ? 1 : 0} */}
                 </button>
               ))}
             </div>
