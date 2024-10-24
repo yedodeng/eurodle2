@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-yellow: #f7a303;
+  --color-dark-gradient-start: #0a121d;
+  --color-dark-gradient-end: #111a25;
+  --color-gray-1: #787f8f;
+  --color-gray-2: #cccfdd;
+  --color-red: #e04038;
+  --font-primary: "Noto Serif", serif;
+}
+
+@layer components {
+  .bg-yellow {
+    background-color: var(--color-yellow);
+  }
+
+  .bg-dark-gradient-start {
+    background-color: var(--color-dark-gradient-start);
+  }
+
+  .bg-dark-gradient-end {
+    background-color: var(--color-dark-gradient-end);
+  }
+
+  .bg-gray-1 {
+    background-color: var(--color-gray-1);
+  }
+
+  .bg-gray-2 {
+    background-color: var(--color-gray-2);
+  }
+
+  .bg-red {
+    background-color: var(--color-red);
+  }
+
+  .text-yellow {
+    color: var(--color-yellow);
+  }
+
+  .text-dark-gradient-start {
+    color: var(--color-dark-gradient-start);
+  }
+
+  .text-dark-gradient-end {
+    color: var(--color-dark-gradient-end);
+  }
+
+  .text-gray-1 {
+    color: var(--color-gray-1);
+  }
+
+  .text-gray-2 {
+    color: var(--color-gray-2);
+  }
+
+  .text-red {
+    color: var(--color-red);
+  }
+}
+
+body {
+  background-color: var(--color-dark-gradient-start);
+  color: white;
+  font-family: "Noto Serif", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 100;
+  font-variation-settings: "wdth" 100;
+}
+
+h1 {
+  font-weight: 300;
+  @apply text-center text-4xl mt-5 mb-2;
+}
+
+h2 {
+  font-weight: 200;
+  @apply text-center text-3xl mt-5 mb-2;
+}
+
+h3 {
+  font-weight: 150;
+  @apply text-2xl mt-5 mb-2;
+}
+
+nav {
+  background: linear-gradient(
+    var(--color-dark-gradient-start),
+    var(--color-dark-gradient-end)
+  );
+}
+
+hr {
+  border-color: var(--color-dark-gradient-end);
+}
+
+.btn-primary {
+  font-weight: 250;
+  @apply rounded-2xl border border-white px-10 py-1 text-center hover:bg-white hover:text-black;
+}
+
+.center {
+  @apply flex justify-center items-center;
+}
+
+.guess-input {
+  @apply bg-transparent border-b text-white;
+}
+
+.table-1 {
+  @apply text-sm w-full;
+
+  th {
+    font-weight: 300;
+    @apply border-b-2;
+  }
+
+  th,
+  td {
+    @apply text-center p-2;
+  }
+
+  .correct > div {
+    @apply bg-yellow rounded-full font-bold text-dark-gradient-start;
+  }
+}
+
+.ko-btn {
+  @apply bg-dark-gradient-end px-2 rounded-lg text-sm disabled:bg-gray-1;
+
+  &.success {
+    @apply bg-yellow;
+  }
+
+  &.error {
+    @apply bg-red;
+  }
+}

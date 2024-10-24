@@ -1,9 +1,0 @@
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-
-.table-1 td {
-    border-bottom: 10px solid white !important;
-  }

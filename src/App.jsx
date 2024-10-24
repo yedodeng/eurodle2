@@ -43,27 +43,29 @@ function Layout() {
   let { x } = useContext(AppContext);
   return (
     <div className="min-h-screen flex flex-col">
-      <nav className="flex items-center border-primary border-b p-5 bg-gray-200 space-x-8">
-        <div className="text-xl font-bold">
-          <Link to="/">Logo Here</Link>
+      <nav className="flex items-center justify-around p-5 bg-gradient-end space-x-8">
+        <div>
+          <Link to="/">
+            <img src="/logo.png" className="h-12"/>
+          </Link>
         </div>
-        <div className="text-xl font-bold">
+        <div>
           <Link to="/daily">Daily</Link>
         </div>
-        <div className="text-xl font-bold">
+        <div>
           <Link to="/unlimited">Unlimited</Link>
         </div>
-        <div className="text-xl font-bold">
+        <div>
           <Link to="/game2">Knockout</Link>
         </div>
-        <div className="text-xl font-bold">
+        <div>
           <Link to="/stats">Stats</Link>
         </div>
-        <div className="text-xl font-bold">
+        {/* <div className="text-xl font-bold">
           <Link to="/admin">Admin</Link>
-        </div>
+        </div> */}
       </nav>
-      <main className="p-5">
+      <main className="p-5 flex-1 flex flex-col container mx-auto">
         <Outlet />
       </main>
     </div>

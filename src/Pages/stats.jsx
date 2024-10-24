@@ -38,10 +38,10 @@ export default function StatsPage() {
 
 function StatTable({ name, data }) {
   return (
-    <div className="rounded-xl shadow p-5">
-      <h1 className="font-bold mb-2">by {name}</h1>
+    <div className="rounded-xl shadow p-5 space-y-5">
+      <h3>by {name}</h3>
       {/* <div>{JSON.stringify(data)}</div> */}
-      <table className="table">
+      <table className="table-1">
         <thead>
           <tr>
             <th>{name}</th>
@@ -52,7 +52,7 @@ function StatTable({ name, data }) {
           {data.map((v, i) => (
             <tr key={i}>
               <td>{v.name}</td>
-              <td>{v.avg}</td>
+              <td><strong>{v.avg}</strong></td>
             </tr>
           ))}
         </tbody>

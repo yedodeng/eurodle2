@@ -1,34 +1,59 @@
 import { useEffect, useState } from "react";
-import Modal from "../modal";
-import useGuesser from "../hooks/useGuesser";
+import { FaArrowCircleRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import Guesses from "../components/guesses";
-import { formatDistance } from "date-fns";
+import H2 from "../components/h2";
+import useGuesser from "../hooks/useGuesser";
+import Modal from "../modal";
+import { supabase } from "../supabaseClient";
 
-export default function Unlimited() {
-  let { peon, names, setNames, loadPeon } = useGuesser();
-  let [ans, setAns] = useState({});
+export default function Daily() {
+  let { peon, names, setNames, loadPeon, chk } = useGuesser();
+  let [ans, setAns] = useState();
   let [showMod, setShowMod] = useState(false);
   let [win, setWin] = useState(false);
   let [ar, setAr] = useState([]);
   let [al, setAl] = useState(false);
-  let [sco, setSco] = useState(0);
-  let [recentGames, setRecentGames] = useState([]);
+  let [played, setPlayed] = useState(false);
+
+  const testt = true;
+  const won = localStorage.getItem("won");
+  const sco = localStorage.getItem("score");
+  useEffect(() => {
+    if (won && chk(won)) {
+      setPlayed(true);
+    }
+    if (!chk(won) || !testt) localStorage.setItem("score", 0);
+    loadData();
+  }, []);
 
   useEffect(() => {
-    newAns();
-    loadRecentGames();
+    if (!ans) dailyAns();
   }, [peon]);
 
-  async function loadRecentGames() {
-    let logs = JSON.parse(localStorage.getItem("unlimited-log") || "[]");
-    setRecentGames(logs.slice(-5));
+  async function loadData() {
+    const { data: data3 } = await supabase.from("answers").select("*");
+
+    let sto = data3.filter((v) => chk(v.date));
+    if (sto.length > 0) {
+      const { data } = await supabase
+        .from("people")
+        .select("*")
+        .eq("name", sto[0].name)
+        .single();
+      setAns(data);
+    }
   }
 
-  async function newAns() {
-    let i = Math.floor(Math.random() * peon.length);
+  async function dailyAns() {
+    let date = new Date();
+    let datePie = [date.getFullYear(), date.getMonth(), date.getDate()];
+    let datePieAsNum = +datePie.join("");
+    let uniq = Math.pow(datePieAsNum, 2).toString();
+    let i = Math.floor(uniq.slice(-7) * 1e-7 * peon.length);
     let obe = peon[i];
-    console.log(obe);
     setAns(obe);
+    console.log(obe);
   }
 
   async function guess(ev) {
@@ -41,96 +66,135 @@ export default function Unlimited() {
       setShowMod(true);
       setWin(true);
       setAl(false);
-
-      // store data in local storage
-      storeStat();
+      let da = new Date();
+      localStorage.setItem("won", da);
+      localStorage.setItem("score", ar.length + 1);
     } else {
       setAr([...ar, gue]);
       setAl(false);
       setNames(names.filter((v) => v != gue.name));
+      localStorage.setItem("score", Number(localStorage.getItem("score")) + 1);
     }
-    setSco(sco + 1);
     ev.target.reset();
   }
 
-  function storeStat() {
-    // store log
-    let logs = JSON.parse(localStorage.getItem("unlimited-log") || "[]");
-    let log = { ...ans, score: sco, time: new Date() };
-    logs.push(log);
-    localStorage.setItem("unlimited-log", JSON.stringify(logs));
-    setRecentGames((v) => [...v, log]);
-  }
-
-  async function newGame() {
-    setWin(false);
-    newAns();
+  async function addName(ev) {
+    ev.preventDefault();
+    const { error } = await supabase.from("leaderboard").insert({
+      name: ev.target["name"].value,
+      score: ar.length,
+    });
+    if (error) console.log(error);
     setShowMod(false);
-    setAr([]);
   }
-
+  if (played && testt)
+    return (
+      <>
+        <div className="text-2xl text-center font-bold mt-8">
+          You have already played today
+        </div>
+        <div className="text-2xl text-center font-bold mt-8">
+          You got a score of {sco}{" "}
+        </div>
+        <div className="flex justify-center m-10">
+          <button className="btn btn-lg text-2xl ">
+            <Link to="/leaderboard">Leaderboard</Link>
+          </button>
+        </div>
+      </>
+    );
   return (
-    <div className="flex">
-      {/* left */}
-      <div className="flex-1">
-        <div className="text-2xl text-center font-bold mt-4">
-          Eurodle Unlimited
+    <div className="space-y-5 flex flex-col items-center flex-1">
+      <H2>Eurodle Daily</H2>
+      <div>Guess the Important European!</div>
+      <div className="h-5"></div>
+
+      {/* play area */}
+      {ar.length === 0 ? (
+        <div className="flex-1 flex flex-col items-center">
+          <QuestionMark />
         </div>
-        <div className="text-lg text-center font-bold">
-          Guess the Important European!
+      ) : (
+        <div className="flex-1 flex flex-col w-full">
+          {al && (
+            <div className="text-lg text-center text-error font-bold text-yellow">
+              Invalid Guess
+            </div>
+          )}
+          <Guesses ar={ar} ans={ans} />
+          {win && (
+            <div className="m-4 flex justify-center">
+              <button className="btn btn-primary text-xl ">
+                <Link to="/unlimited">Play More</Link>
+              </button>
+            </div>
+          )}
         </div>
-        {al && (
-          <div className="text-lg text-center text-error font-bold">
-            Invalid Guess
-          </div>
-        )}
-        <Guesses ar={ar} ans={ans} win={win} guess={guess} names={names} />
-        {win && (
-          <div className=" m-4 flex justify-center">
-            <button className="btn text-xl btn-primary" onClick={newGame}>
-              New Game
-            </button>
-          </div>
-        )}
-        <div className="text-center text-xl font-bold my-4">
+      )}
+
+      <div className="flex justify-between items-center w-full text-xl">
+        <div className="text-center my-4">
+          Number of Guesses: <span className="font-bold text-2xl">{sco}</span>
+        </div>
+        <div className="flex justify-end">
+          <Link to="/leaderboard" className="flex items-center space-x-2">
+            <FaArrowCircleRight />
+            <div className="font-bold">Leaderboard</div>
+          </Link>
+        </div>
+      </div>
+      <hr />
+      <form className="flex items-center gap-2 w-full" onSubmit={guess}>
+        <input
+          list="guess"
+          name="guess"
+          className="flex-1 guess-input"
+          placeholder="Select your next guess"
+        />
+        <datalist id="guess">
+          {names?.map((v, i) => (
+            <option value={v} key={i}></option>
+          ))}
+        </datalist>
+        <button className="btn-primary" disabled={win}>
+          Submit
+        </button>
+      </form>
+
+      {/* modal */}
+      <Modal show={showMod} close={() => setShowMod(false)} btn="X">
+        <div className="mt-6 text-2xl font-bold text-center">Victory!!</div>
+        <div className="m-4 text-xl font-bold text-center">
           Number of Guesses: {sco}
         </div>
-        <Modal show={showMod} close={() => setShowMod(false)} btn="X">
-          <div className="m-4 mt-6 text-2xl font-bold text-center">
-            Victory!!
-          </div>
-          <div className="m-4 text-xl font-bold text-center">
-            Number of Guesses: {sco}
-          </div>
+        <form
+          className="flex flex-col justify-center space-y-4"
+          onSubmit={addName}
+        >
+          <input
+            placeholder="Submit your name to the leaderboard"
+            name="name"
+            className="input input-bordered w-full bg-transparent"
+          />
+          <button className="btn text-xl btn-primary">Submit</button>
+        </form>
+      </Modal>
+    </div>
+  );
+}
 
-          <div className="flex flex-col">
-            <button className="btn text-xl btn-primary" onClick={newGame}>
-              New Game
-            </button>
-          </div>
-        </Modal>
-      </div>
-
-      {/* right */}
-      <div>
-        <h1>Recent Games</h1>
-        <table className="table">
-          <thead>
-            <th></th>
-            <th>Name</th>
-            <th>Score</th>
-          </thead>
-          <tbody>
-            {recentGames.map((g, i) => (
-              <tr key={i}>
-                <td>{formatDistance(new Date(g.time), new Date())}</td>
-                <td>{g.name}</td>
-                <td>{g.score}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+function QuestionMark() {
+  return (
+    <div className="flex-1 center">
+      <img
+        src="/question-solid.svg"
+        alt=""
+        className="h-40"
+        style={{
+          filter:
+            "invert(55%) sepia(23%) saturate(224%) hue-rotate(183deg) brightness(86%) contrast(89%)",
+        }}
+      ></img>
     </div>
   );
 }
