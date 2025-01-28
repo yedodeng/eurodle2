@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react"
 
 export default function Test() {
-    let [cir, setCir] = useState([]);
-    let [cnt, setCnt] = useState(0);
+    let [cir, setCir] = useState([]); //Circle Array
+    let [cnt, setCnt] = useState(0); //ClickCnt
 
     const width = 800;
     const height = 600; 
     const circleSize = 28;
+
+
     const Circle = ({ top, left, onClick }) => {
         return (
           <div
@@ -44,7 +46,7 @@ export default function Test() {
 
       return (
         <>
-          <h1>Circle Click Game</h1>
+          <h1>Circle Click Puzzle</h1>
           <h2>Clicks: {cnt}</h2>
           <div
             className="bg-white relative"
