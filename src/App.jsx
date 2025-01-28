@@ -10,6 +10,8 @@ import Knockout from "./Pages/knockout";
 import Home from "./Pages/home";
 import StatsPage from "./Pages/stats";
 import RecentGames from "./Pages/recent";
+import Test from "./Pages/test";
+
 
 export const AppContext = createContext(null);
 
@@ -35,6 +37,7 @@ export default function App() {
           <Route path="/game2" element={<Knockout />}></Route>
           <Route path="/stats" element={<StatsPage />}></Route>
           <Route path="/recent" element={<RecentGames />}></Route>
+          <Route path="/test" element={<Test />}></Route>
         </Route>
       </Routes>
     </AppContext.Provider>
@@ -62,6 +65,9 @@ function Layout() {
         </div>
         <div>
           <Link to="/stats">Stats</Link>
+        </div>
+        <div>
+          <Link to="/test">Test</Link>
         </div>
         {/* <div className="text-xl font-bold">
           <Link to="/admin">Admin</Link>
