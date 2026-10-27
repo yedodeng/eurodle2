@@ -11,7 +11,7 @@ Eurodle is a web-based game inspired by Wordle, built around European geography.
 
 ## Tech Stack
 
-- **Frontend:** [Your framework, e.g. React]
+- **Frontend:** React
 - **Database:** [Supabase / PostgreSQL]
 - **Hosting:** Vercel
 - **Source Control:** GitHub
@@ -20,9 +20,8 @@ Eurodle is a web-based game inspired by Wordle, built around European geography.
 
 ### Prerequisites
 
-- Node.js (version 24 or a version supported by the project)
+- Node.js version 24 
 - npm
-- A Supabase project, if required by the application
 
 ### Installation
 
