@@ -44,7 +44,6 @@ export default function Daily() {
       setShowMod(true);
       setWin(true);
       setAl(false);
-
       // store data in local storage
       storeStat();
     } else {
@@ -70,6 +69,7 @@ export default function Daily() {
     newAns();
     setShowMod(false);
     setAr([]);
+    setSco(0);
   }
 
   return (
@@ -93,8 +93,8 @@ export default function Daily() {
           <Guesses ar={ar} ans={ans} />
           {win && (
             <div className="m-4 flex justify-center">
-              <button className="btn btn-primary text-xl ">
-                <Link to="/unlimited">Play More</Link>
+              <button className="btn btn-primary text-xl " onClick={newGame}>
+                Play More
               </button>
             </div>
           )}
