@@ -17,20 +17,34 @@ function getStat(ar, key) {
   return ret;
 }
 
+
+
 export default function StatsPage() {
-  const logs = JSON.parse(localStorage.getItem("unlimited-log") || []);
-  let religion = getStat(logs, "religion");
-  let era = getStat(logs, "era");
-  let role = getStat(logs, "role");
-  let country = getStat(logs, "country");
+  const stats = useMemo(() => {
+    try {
+      // Safe JSON parsing fallback
+      const rawLogs = localStorage.getItem("unlimited-log");
+      const logs = rawLogs ? JSON.parse(rawLogs) : [];
+      
+      return {
+        religion: getStat(logs, "religion"),
+        era: getStat(logs, "era"),
+        role: getStat(logs, "role"),
+        country: getStat(logs, "country"),
+      };
+    } catch (e) {
+      console.error("Failed to parse logs from localStorage", e);
+      return { religion: [], era: [], role: [], country: [] };
+    }
+  }, []); 
 
   return (
     <div>
       <div className="grid grid-cols-2 gap-5">
-        <StatTable name="religion" data={religion} />
-        <StatTable name="era" data={era} />
-        <StatTable name="role" data={role} />
-        <StatTable name="country" data={country} />
+        <StatTable name="religion" data={stats.religion} />
+        <StatTable name="era" data={stats.era} />
+        <StatTable name="role" data={stats.role} />
+        <StatTable name="country" data={stats.country} />
       </div>
     </div>
   );
